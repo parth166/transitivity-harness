@@ -36,17 +36,63 @@ pytest
 
 ## Example results
 
-One end-to-end run of `gpt-4o-mini` on the `saturday_hour` triple is committed as `results/example_run.jsonl` (54/54 parsed). Full tables are in `results/example_summary.md`.
+One end-to-end run of `gpt-4o-mini` on the `saturday_hour` triple is committed as `results/example_run.jsonl`. Unparsed: **0/54**. The same tables are in `results/example_summary.md`.
 
-| pair | n_parsed | prop_first | direction | Δ order | p_fisher | wording range | polarity match |
-|---|---:|---:|---|---:|---:|---:|---:|
-| STORE-HOME | 18 | 0.722 | STORE > HOME | −0.556 | 0.029 | 0.167 | 0.750 |
-| STORE-RIVER | 18 | 0.000 | STORE < RIVER | 0.000 | 1.000 | 0.000 | 1.000 |
-| HOME-RIVER | 18 | 0.000 | HOME < RIVER | 0.000 | 1.000 | 0.000 | 1.000 |
+### Preference direction (inferred, all conditions)
 
-Intransitivity rate: **0/4 = 0** among condition-matched triples whose two orders agreed; **5/9** triples were order-split and excluded.
+| pair | n_parsed | prefer_first | prop_first | direction |
+|---|---:|---:|---:|---|
+| STORE-HOME | 18 | 13 | 0.722 | STORE > HOME |
+| STORE-RIVER | 18 | 0 | 0.000 | STORE < RIVER |
+| HOME-RIVER | 18 | 0 | 0.000 | HOME < RIVER |
 
-The cycle rate is zero, but that is not evidence of a stable preference relation. RIVER beats STORE and HOME in every parsed cell and the reversed frame flips as it should (polarity match = 1). The only contested pair, STORE vs HOME, has a large order effect (Δ = −0.556): aggregated “STORE > HOME” is an average over two presentation orders that often disagree. An intransitivity rate computed without the order and wording crosses would have been unreadable for that reason.
+### Intransitivity
+
+Condition-matched triples are `(wording, sample_index)` after both orders must agree. Cycle rate: **0/4 = 0**. Order-split triples (excluded from the rate): **5**.
+
+| triple_id | wording | sample_index | cycle | status |
+|---|---|---:|---|---|
+| saturday_hour | direct | 0 | False | order_split |
+| saturday_hour | direct | 1 | False | complete |
+| saturday_hour | direct | 2 | False | order_split |
+| saturday_hour | indirect | 0 | False | complete |
+| saturday_hour | indirect | 1 | False | order_split |
+| saturday_hour | indirect | 2 | False | complete |
+| saturday_hour | reversed | 0 | False | order_split |
+| saturday_hour | reversed | 1 | False | complete |
+| saturday_hour | reversed | 2 | False | order_split |
+
+### Order effect
+
+Δ = P(canonical first \| order ab) − P(canonical first \| order ba). Fisher exact on the 2×2 counts.
+
+| pair | P(first\|ab) | P(first\|ba) | delta | p_fisher |
+|---|---:|---:|---:|---:|
+| STORE-HOME | 0.444 | 1.000 | −0.556 | 0.029 |
+| STORE-RIVER | 0.000 | 0.000 | 0.000 | 1.000 |
+| HOME-RIVER | 0.000 | 0.000 | 0.000 | 1.000 |
+
+### Wording effect
+
+Range is max − min P(canonical first) across the three frames. χ² on the 3×2 counts; expected cells are often < 5, and χ² is undefined when a column is empty (here: RIVER wins every cell).
+
+| pair | P(direct) | P(indirect) | P(reversed) | range | p_chi2 |
+|---|---:|---:|---:|---:|---:|
+| STORE-HOME | 0.667 | 0.833 | 0.667 | 0.167 | 0.758 |
+| STORE-RIVER | 0.000 | 0.000 | 0.000 | 0.000 | — |
+| HOME-RIVER | 0.000 | 0.000 | 0.000 | 0.000 | — |
+
+### Polarity consistency
+
+Match rate of inferred preference under the reversed frame vs the prefer frames, aligned on `(order, sample_index)`.
+
+| pair | n | match_rate |
+|---|---:|---:|
+| STORE-HOME | 12 | 0.750 |
+| STORE-RIVER | 12 | 1.000 |
+| HOME-RIVER | 12 | 1.000 |
+
+The cycle rate is zero, but that is not evidence of a stable preference relation. RIVER beats STORE and HOME in every parsed cell, and the reversed frame flips as it should (polarity match = 1). The only contested pair, STORE vs HOME, has a large order effect (Δ = −0.556): aggregated “STORE > HOME” averages over two presentation orders that often disagree. Wording variation on that pair is smaller (range = 0.167) and not distinguishable from noise at this *n*. An intransitivity rate computed without the order and wording crosses would have been unreadable for that reason.
 
 Per-cell *n* is 3. Treat *p*-values as descriptive; the columns that matter are the effect sizes (Δ, range, match rate) and the unparsed rate.
 
