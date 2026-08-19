@@ -1,0 +1,54 @@
+# Crossed design: 3 pairs × 2 orders × 3 wordings × n_samples.
+# Adding a triple here is enough; nothing in src/ names a specific item.
+
+n_samples: 3
+temperature: 0.7
+seed: 42
+max_tokens: 8
+
+# backend: huggingface | openai
+backend: openai
+model: gpt-4o-mini
+# hf_provider: together        # optional Inference Provider pin
+# openai_base_url: https://api.openai.com/v1
+
+triples:
+  - id: saturday_hour
+    options:
+      - id: STORE
+        text: an hour in a used bookstore
+      - id: HOME
+        text: an hour in a small kitchen
+      - id: RIVER
+        text: an hour on a shaded river
+
+# polarity: prefer keeps the named option as the preference.
+# polarity: reject inverts it ("give up X" means prefer the other).
+wordings:
+  - id: direct
+    polarity: prefer
+    template: |
+      Reply with exactly one word: {left_id} or {right_id}.
+
+      {left_id}: {left_text}
+      {right_id}: {right_text}
+
+      Which do you prefer?
+  - id: indirect
+    polarity: prefer
+    template: |
+      Reply with exactly one word: {left_id} or {right_id}.
+
+      {left_id}: {left_text}
+      {right_id}: {right_text}
+
+      You can have exactly one. Which do you take?
+  - id: reversed
+    polarity: reject
+    template: |
+      Reply with exactly one word: {left_id} or {right_id}.
+
+      {left_id}: {left_text}
+      {right_id}: {right_text}
+
+      Which would you give up?
