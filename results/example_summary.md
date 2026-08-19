@@ -17,10 +17,10 @@ Matched triples are `(wording, sample_index)` after both orders agree. Cycle rat
 | triple_id     | wording   |   sample_index | cycle   | status      |
 |:--------------|:----------|---------------:|:--------|:------------|
 | saturday_hour | direct    |              0 | False   | order_split |
-| saturday_hour | direct    |              1 | False   | order_split |
+| saturday_hour | direct    |              1 | False   | complete    |
 | saturday_hour | direct    |              2 | False   | order_split |
 | saturday_hour | indirect  |              0 | False   | complete    |
-| saturday_hour | indirect  |              1 | False   | complete    |
+| saturday_hour | indirect  |              1 | False   | order_split |
 | saturday_hour | indirect  |              2 | False   | complete    |
 | saturday_hour | reversed  |              0 | False   | order_split |
 | saturday_hour | reversed  |              1 | False   | complete    |
@@ -42,7 +42,7 @@ Range = max − min P(canonical first) across frames. χ² on 3×2 counts; expec
 
 | pair        |   P(direct) |   P(indirect) |   P(reversed) |   range |   p_chi2 |
 |:------------|------------:|--------------:|--------------:|--------:|---------:|
-| STORE-HOME  |       0.500 |         1.000 |         0.667 |   0.500 |    0.144 |
+| STORE-HOME  |       0.667 |         0.833 |         0.667 |   0.167 |    0.758 |
 | STORE-RIVER |       0.000 |         0.000 |         0.000 |   0.000 |  nan     |
 | HOME-RIVER  |       0.000 |         0.000 |         0.000 |   0.000 |  nan     |
 

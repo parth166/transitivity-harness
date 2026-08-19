@@ -40,7 +40,7 @@ One end-to-end run of `gpt-4o-mini` on the `saturday_hour` triple is committed a
 
 | pair | n_parsed | prop_first | direction | Δ order | p_fisher | wording range | polarity match |
 |---|---:|---:|---|---:|---:|---:|---:|
-| STORE-HOME | 18 | 0.722 | STORE > HOME | −0.556 | 0.029 | 0.500 | 0.750 |
+| STORE-HOME | 18 | 0.722 | STORE > HOME | −0.556 | 0.029 | 0.167 | 0.750 |
 | STORE-RIVER | 18 | 0.000 | STORE < RIVER | 0.000 | 1.000 | 0.000 | 1.000 |
 | HOME-RIVER | 18 | 0.000 | HOME < RIVER | 0.000 | 1.000 | 0.000 | 1.000 |
 
